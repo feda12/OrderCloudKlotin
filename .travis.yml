@@ -1,8 +1,17 @@
 language: java
-
+notifications:
+  email:
+    recipients:
+    - blecam@four51.com
+    on_success: change
+    on_failure: always
+  slack:
+    on_success: always
+    on_failure: always
+    secure: vpmJtL2zCSFFIDkyNh2Jl7KGOA7DMBLcMfqpGVFIkF8Ye27iT0EnSWJ8jJikXDrCekbfHvKQzbMEravuJkeoX5ZMaGfGa9Q8cD8kGy/wkJocwYeMiwqWTzeFOVMp1YRvBHBL2GHcSXaKqviQAyqlza5DQdmfS6A/WSgyCGTeyxyqeJaQmaQRDdlOnNPluuF+QJRn4ZqEq9UeccGONoawD+YVMtVJP9VwhWIx1julFm2edCVWd5sTYw8S1owpJtrYxJCdLlT+bLNU4S+wz5qZ0mYfI3QVAWtTmGIa6N3tbIo+VS5G7MuQwciDMXInBkFxpxlnhs35awFiVd35tx3f5+roC4qRt8Xnnh2eVC0sOkLvrrDarAuzccdEJL6gBdjzerFTZxI0MsJQAoRpVA3y66jUCGPNbK28e+TQ2jnLSuNsq6bjwV0IRfMP2HXmnIwGSVFFZD726P68ygatKjW4e1kho25E/3D5bZ5ITAHM647AjpKtK3+cbjJ3HlEJkpapc2OiUiXQ70bUqYvBXWf55vVktR+nR8AQ7s7ezaALyN7C/L9jvQ29W6OOBa3vYjPtZ62uQAy825rJtydJ/8zLN1q3FQuXIvDhmMs8ARMR57kWyuUL+OcR4R0Vcg7Nvt/W2NVQRWJhWiurGldp7S35LSbxFhF4ehHNTN7W829GuPY=
 before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
