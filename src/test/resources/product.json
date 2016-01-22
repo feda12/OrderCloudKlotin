@@ -1,0 +1,15 @@
+{
+    "ID": "1",
+    "Name": "test-product",
+    "Description": "This is a test product",
+    "QuantityMultiplier": 1,
+    "ShipWeight": null,
+    "Active": true,
+    "Type": "Static",
+    "InventoryEnabled": false,
+    "InventoryNotificationPoint": null,
+    "VariantLevelInventory": false,
+    "xp": null,
+    "AllowOrderExceedInventory": false,
+    "DisplayInventory": false
+}

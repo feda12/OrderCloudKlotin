@@ -1,0 +1,15 @@
+{
+    "ID": "product-created",
+    "Name": "Product Created",
+    "Description": "This is a test product that is created from iOS",
+    "QuantityMultiplier": 1,
+    "ShipWeight": null,
+    "Active": true,
+    "Type": "Static",
+    "InventoryEnabled": false,
+    "InventoryNotificationPoint": null,
+    "VariantLevelInventory": false,
+    "xp": null,
+    "AllowOrderExceedInventory": false,
+    "DisplayInventory": false
+}

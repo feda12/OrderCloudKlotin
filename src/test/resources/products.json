@@ -1,0 +1,44 @@
+{
+    "Meta": {
+        "Page": 1,
+        "PageSize": 20,
+        "TotalCount": 2,
+        "TotalPages": 1,
+        "ItemRange": [
+                      1,
+                      2
+                      ]
+    },
+    "Items": [
+              {
+              "ID": "1",
+              "Name": "test-product",
+              "Description": "This is a test product",
+              "QuantityMultiplier": 1,
+              "ShipWeight": null,
+              "Active": true,
+              "Type": "Static",
+              "InventoryEnabled": false,
+              "InventoryNotificationPoint": null,
+              "VariantLevelInventory": false,
+              "xp": null,
+              "AllowOrderExceedInventory": false,
+              "DisplayInventory": false
+              },
+              {
+              "ID": "2",
+              "Name": "test-product2",
+              "Description": "This is a test product 2",
+              "QuantityMultiplier": 2,
+              "ShipWeight": null,
+              "Active": true,
+              "Type": "Static",
+              "InventoryEnabled": false,
+              "InventoryNotificationPoint": null,
+              "VariantLevelInventory": false,
+              "xp": null,
+              "AllowOrderExceedInventory": false,
+              "DisplayInventory": false
+              }
+              ]
+}
