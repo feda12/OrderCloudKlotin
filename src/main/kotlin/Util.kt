@@ -13,9 +13,9 @@ import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.result.Result
-import sun.text.normalizer.UTF16
 import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.util.concurrent.CountDownLatch
 
 public class Util {
     companion object {
@@ -95,30 +95,33 @@ public class Util {
         /*
             Returns a default handler for the authentication
         */
-        public fun defaultAuthHandler(): (Request, Response, Result<String, FuelError>) -> Unit {
+        public fun defaultAuthHandler(lock: CountDownLatch): (Request, Response, Result<String, FuelError>) -> Unit {
             return { request, response, result ->
                 val (data, error) = result
-                print("This is the default auth handler")
-                if (error != null) {
 
-                    val authJson: JsonObject = JsonObject()
+                if (error != null) {
+                    println(error)
+                } else {
+
+                    val authJson: JsonObject = Util.strToJsonObject(data!!)
                     print(authJson)
                     val authToken: String = authJson.string("access_token")!!
                     if (authToken.count() > 0) {
-                        User.currentUser.setupWithToken(authToken)
+                        User.currentUser.setupWithToken(authToken, completionHandler = { request, response, result ->
+
+                        })
                     } else {
                         val errors: JsonArray<JsonObject> = authJson.array<JsonObject>("Errors")!!
                         if (errors.count() > 0) {
                             for (error in errors) {
-                                print(error)
+                                println(error)
                             }
                         } else {
-                            print("Unknown authentication error")
+                            println("Unknown authentication error")
                         }
                     }
-                } else {
-                    print(error)
                 }
+                lock.countDown()
             }
         }
     }

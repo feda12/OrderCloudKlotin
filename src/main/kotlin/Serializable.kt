@@ -47,7 +47,7 @@ abstract public class Serializable {
         public fun completionHandler(obj: Serializable): (Request, Response, Result<String, FuelError>) -> Unit {
             return { request, response, result ->
                 val (data, error) = result
-                if (error != null) {
+                if (error == null) {
                     obj.deserialize(Util.strToJsonObject(data!!))
                 } else {
                     println(error)

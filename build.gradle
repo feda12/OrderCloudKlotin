@@ -32,12 +32,13 @@ dependencies {
     compile 'com.beust:klaxon:0.20'
 
     compile 'joda-time:joda-time:+'
-    compile 'net.danlew:android.joda:2.9.1'
 
     testCompile 'org.jetbrains.spek:spek:0.1.188'
 }
 
 mainClassName = "OrderCloud"
+
+version = '0.1.0'
 
 test {
   testLogging {
@@ -49,3 +50,13 @@ test {
   }
 }
 
+task orderCloudJar(type: Jar) {
+  manifest {
+    attributes 'Implementation-Title': 'OrderCloud',
+               'Implementation-Version': '0.1.0',
+               'Main-Class': 'com.four51.ordercoud.OrderCloud'
+  }
+  baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  with jar
+}

@@ -10,6 +10,7 @@ package com.four51.ordercloud.tests
 import com.beust.klaxon.*
 import com.four51.ordercloud.*
 import org.jetbrains.spek.api.*
+import java.util.concurrent.CountDownLatch
 
 class ProductsSpec : Spek() {
     init {
@@ -18,10 +19,11 @@ class ProductsSpec : Spek() {
                 it("creates, gets, updates, patches and deletes a product") {
                     val loader: ClassLoader = Thread.currentThread().getContextClassLoader()
                     OrderCloud.setupClientId("26B93175-8B38-4EB3-969F-91ACB109DA2D")
-                    User.currentUser.authenticate("blecam", password = "fails345", completionHandler = { request, response, result ->
-                        Util.defaultAuthHandler()
-                        shouldEqual(true, User.currentUser.isAuthenticated())
-                    })
+                    val lock = CountDownLatch(1)
+
+                    User.currentUser.authenticate("blecam", password = "fails345", completionHandler = Util.defaultAuthHandler(lock))
+                    lock.await()
+                    shouldEqual(true, User.currentUser.isAuthenticated())
 
                     val productA: Product = Product()
 

@@ -36,7 +36,7 @@ public class User : Serializable {
     public var termsAccepted: DateTime? = DateTime()
     public var active: Boolean? = false
     public var xp: JsonObject? = JsonObject()
-
+    public var securityProfileId: Int? = null
 
     constructor() {
 
@@ -52,15 +52,15 @@ public class User : Serializable {
     /*
         Method to setup user given a token
     */
-    public fun setupWithToken(token: String) {
-        this.accessToken = token;
-        Api.get("me", completionHandler = Serializable.completionHandler(this))
+    public fun setupWithToken(token: String, completionHandler: (Request, Response, Result<String, FuelError>) -> Unit) {
+        this.accessToken = token
+        Api.get("me", completionHandler = completionHandler)
     }
 
     /*
         Authenticate a user given an username, password and scope as well as a potential handler
     */
-    public fun authenticate(username: String, password: String, scope: String = "FullAccess", completionHandler: (Request, Response, Result<String, FuelError>) -> Unit = Util.defaultAuthHandler()) {
+    public fun authenticate(username: String, password: String, scope: String = "FullAccess", completionHandler: (Request, Response, Result<String, FuelError>) -> Unit) {
         val authParams = mapOf(
                 "grant_type" to "password",
                 "client_id" to OrderCloud.getClientId(),
@@ -93,20 +93,62 @@ public class User : Serializable {
         this.termsAccepted = null
         this.active = false
         this.xp = JsonObject()
+        this.securityProfileId = null
     }
 
     override public fun deserialize(jsonData: JsonObject) {
-        super.deserialize(jsonData)
+        //super.deserialize(jsonData)
 
-        this.firstName = jsonData.string("FirstName")
-        this.lastName = jsonData.string("LastName")
-        this.id = jsonData.string("ID")!!
-        this.username = jsonData.string("Username")!!
-        this.email = jsonData.string("Email")
-        this.phone = jsonData.string("Phone")
-        this.termsAccepted = DateTime.parse(jsonData.string("TermsAccepted"))
-        this.active = jsonData.boolean("Active")
-        this.xp = jsonData.obj("xp")
+        try {
+            this.firstName = jsonData.string("FirstName")
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: firstname")
+        }
+        try {
+            this.lastName = jsonData.string("LastName")
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: lastname")
+        }
+        try {
+            this.id = jsonData.string("ID")!!
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: id")
+        }
+        try {
+            this.username = jsonData.string("Username")!!
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: username")
+        }
+        try {
+            this.email = jsonData.string("Email")
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: email")
+        }
+        try {
+            this.phone = jsonData.string("Phone")
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: phone")
+        }
+        try {
+            this.termsAccepted = DateTime.parse(jsonData.string("TermsAccepted"))
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: terms accepted")
+        }
+        try {
+            this.active = jsonData.boolean("Active")
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: active")
+        }
+        try {
+            this.xp = jsonData.obj("xp")
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: xp")
+        }
+        try {
+            this.securityProfileId = jsonData.int("SecurityProfileID")
+        } catch (e: Exception) {
+            println("Error: could not parse JSON field: security profile")
+        }
     }
 
     override public fun serialize(): Map<String, Any?> {
@@ -119,7 +161,8 @@ public class User : Serializable {
                 "Phone" to this.phone,
                 "TermsAccepted" to this.termsAccepted.toString(),
                 "Active" to this.active,
-                "xp" to this.xp
+                "xp" to this.xp,
+                "SecurityProfileID" to this.securityProfileId
         )
     }
 }

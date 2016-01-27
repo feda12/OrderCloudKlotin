@@ -11,11 +11,17 @@ package com.four51.ordercloud.tests
 
 import com.beust.klaxon.*
 import com.four51.ordercloud.*
+import com.github.kittinunf.fuel.*
+import com.github.kittinunf.fuel.core.FuelError
+import com.github.kittinunf.fuel.core.Request
+import com.github.kittinunf.fuel.core.Response
 import org.jetbrains.spek.api.*
 import org.joda.time.DateTime
+import java.util.concurrent.CountDownLatch
 
 class UserSpec : Spek() {
     init {
+
         given("Current User") {
             on("authentication")
             {
@@ -30,10 +36,16 @@ class UserSpec : Spek() {
                 it("authenticates an user properly") {
                     shouldEqual(false, User.currentUser.isAuthenticated())
                     OrderCloud.setupClientId("26B93175-8B38-4EB3-969F-91ACB109DA2D")
-                    User.currentUser.authenticate("blecam", password = "fails345", completionHandler = { request, response, result ->
-                        Util.defaultAuthHandler()
-                        shouldEqual(true, User.currentUser.isAuthenticated())
-                    })
+
+                    val lock = CountDownLatch(1)
+
+                    User.currentUser.authenticate("blecam", password = "fails345", completionHandler = Util.defaultAuthHandler(lock))
+                    lock.await()
+
+                    println("waiting for countdown")
+                    shouldNotBeNull(User.currentUser.getAccessToken())
+                    shouldEqual(true, User.currentUser.isAuthenticated())
+
                     User.currentUser.logout()
                 }
             }
@@ -114,21 +126,27 @@ class UserSpec : Spek() {
                 }
             }
         }
-        given("User API calls") {
+        given("User API calls")
+        {
             on("/me") {
                 it("fetches the data serializes it") {
                     User.currentUser.logout()
                     shouldEqual(false, User.currentUser.isAuthenticated())
                     OrderCloud.setupClientId("26B93175-8B38-4EB3-969F-91ACB109DA2D")
-                    User.currentUser.authenticate("blecam", password = "fails345", completionHandler = { request, response, result ->
-                        Util.defaultAuthHandler()
-                        shouldEqual(true, User.currentUser.isAuthenticated())
-                    })
+                    var lock = CountDownLatch(1)
+                    User.currentUser.authenticate("blecam", password = "fails345", completionHandler = Util.defaultAuthHandler(lock))
+                    lock.await()
+                    shouldEqual(true, User.currentUser.isAuthenticated())
 
+                    lock = CountDownLatch(1)
                     Api.get("me", completionHandler = { request, response, result ->
-                        Serializable.completionHandler(User.currentUser)
-                        shouldNotEqual(String(), User.currentUser.firstName)
+                        println(request)
+                        println(response)
+                        lock.countDown()
                     })
+                    lock.await()
+                    shouldNotEqual(String(), User.currentUser.firstName)
+
                 }
             }
         }
