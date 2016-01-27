@@ -144,11 +144,11 @@ public class User : Serializable {
         } catch (e: Exception) {
             println("Error: could not parse JSON field: xp")
         }
-        try {
-            this.securityProfileId = jsonData.int("SecurityProfileID")
-        } catch (e: Exception) {
-            println("Error: could not parse JSON field: security profile")
-        }
+//        try {
+//            this.securityProfileId = jsonData.int("SecurityProfileID")
+//        } catch (e: Exception) {
+//            println("Error: could not parse JSON field: security profile")
+//        }
     }
 
     override public fun serialize(): Map<String, Any?> {
@@ -161,8 +161,8 @@ public class User : Serializable {
                 "Phone" to this.phone,
                 "TermsAccepted" to this.termsAccepted.toString(),
                 "Active" to this.active,
-                "xp" to this.xp,
-                "SecurityProfileID" to this.securityProfileId
+                "xp" to this.xp
+//                "SecurityProfileID" to this.securityProfileId
         )
     }
 }

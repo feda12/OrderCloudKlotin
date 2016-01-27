@@ -129,7 +129,7 @@ class UserSpec : Spek() {
         given("User API calls")
         {
             on("/me") {
-                it("fetches the data serializes it") {
+                it("fetches the data and serializes it") {
                     User.currentUser.logout()
                     shouldEqual(false, User.currentUser.isAuthenticated())
                     OrderCloud.setupClientId("26B93175-8B38-4EB3-969F-91ACB109DA2D")
@@ -140,13 +140,17 @@ class UserSpec : Spek() {
 
                     lock = CountDownLatch(1)
                     Api.get("me", completionHandler = { request, response, result ->
-                        println(request)
-                        println(response)
+                        val (data, error) = result
+
+                        if (error != null) {
+                            println(error)
+                        } else {
+                            User.currentUser.deserialize(Util.strToJsonObject(data!!))
+                        }
                         lock.countDown()
                     })
                     lock.await()
                     shouldNotEqual(String(), User.currentUser.firstName)
-
                 }
             }
         }
